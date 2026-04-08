@@ -61,7 +61,7 @@ impl DefaultQuery {
     }
 
     fn default_char_set() -> std::sync::Arc<[u8]> {
-       let char_set: Vec<u8> = (b'0'..=b'9')
+       let mut char_set: Vec<u8> = (b'0'..=b'9')
         .chain(b'A'..=b'Z')
         .chain(b'a'..=b'z')
         .collect();
