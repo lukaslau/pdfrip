@@ -5,30 +5,6 @@ on:
     types: [created]
   workflow_dispatch:
 jobs:
-  build-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install latest rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install qpdf
-        run: sudo apt-get update && sudo apt-get install -y qpdf
-
-      - name: Build
-        run: cargo build --workspace --release --locked --verbose && strip target/release/pdfrip && mv target/release/pdfrip target/release/pdfrip_amd64
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            target/release/pdfrip_amd64
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build-win:
     runs-on: windows-latest
     steps:
@@ -38,12 +14,6 @@ jobs:
       - name: Install latest rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Test
-        run: cargo test --workspace --locked --verbose
-
-      - name: Build benchmark harness
-        run: cargo bench --bench throughput --no-run --locked --verbose
-
       - name: Build
         run: cargo build --workspace --release --locked --verbose
 
@@ -52,34 +22,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: target/release/pdfrip.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-mac:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install latest rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          target: x86_64-apple-darwin
-
-      - name: Test
-        run: cargo test --workspace --locked --verbose
-
-      - name: Build benchmark harness
-        run: cargo bench --bench throughput --no-run --locked --verbose
-
-      - name: Build for mac
-        run: cargo build --workspace --release --locked --verbose && strip target/release/pdfrip && mv target/release/pdfrip target/release/pdfrip_darwin
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            target/release/pdfrip_darwin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
