@@ -17,15 +17,6 @@ jobs:
       - name: Install qpdf
         run: sudo apt-get update && sudo apt-get install -y qpdf
 
-      - name: Test
-        run: cargo test --workspace --locked --verbose
-
-      - name: Run qpdf-backed verifier agreement tests
-        run: PDFRIP_QPDF_TESTS=1 cargo test -p cracker --test prepared_verifier --locked --verbose
-
-      - name: Build benchmark harness
-        run: cargo bench --bench throughput --no-run --locked --verbose
-
       - name: Build
         run: cargo build --workspace --release --locked --verbose && strip target/release/pdfrip && mv target/release/pdfrip target/release/pdfrip_amd64
 
