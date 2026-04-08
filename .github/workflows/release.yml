@@ -18,9 +18,7 @@ jobs:
         run: cargo build --workspace --release --locked --verbose
 
       - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
         with:
-          files: target/release/pdfrip.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: pdfrip-windows
+          path: target/release/pdfrip.exe
